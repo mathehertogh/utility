@@ -11,7 +11,7 @@ sleep 1
 if [ -f $NAME.pid ]; then
 	echo "VM is booting now on cpus $CPUS!"
 	echo "See boot terminal here:"
-	echo "        tmux a -t $NAME"
+	echo "        sudo tmux a -t $NAME"
 	echo "ssh access:"
 	echo "        ssh $NAME"
 else
