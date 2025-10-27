@@ -87,10 +87,11 @@ dpkg-deb --fsys-tarfile linux-image-*.deb | tar Ox --wildcards  './boot/vmlinuz-
 /usr/src/linux-headers-$(uname -r)/scripts/extract-vmlinux vmlinuz > vmlinux
 
 # Download linux headers
+apt download linux-headers-${LINUX_VERSION}
 apt download linux-headers-${LINUX_NAME}
 
 # Extract config
-dpkg-deb --fsys-tarfile linux-headers-*.deb | tar Ox --wildcards './usr/src/*/.config' > config
+dpkg-deb --fsys-tarfile linux-headers-${LINUX_NAME}*.deb | tar Ox --wildcards './usr/src/*/.config' > config
 
 # Download linux modules
 apt download linux-modules-${LINUX_NAME}
@@ -104,7 +105,7 @@ if [ ! $BINONLY ]; then
 
     # Download source code
     if [ -z "$LINUX_VERSION_FULL" ]; then
-        LINUX_VERSION_FULL=$(echo linux-headers-*.deb | cut -d "_" -f 2)
+        LINUX_VERSION_FULL=$(echo linux-headers-${LINUX_NAME}*.deb | cut -d "_" -f 2)
     fi
     git clone --depth 1 --branch Ubuntu-${LINUX_VERSION_FULL} git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/`lsb_release -c -s` src
 fi

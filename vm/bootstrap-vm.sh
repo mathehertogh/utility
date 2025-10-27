@@ -148,7 +148,7 @@ if [ $FOREIGN = "true" ]; then
 fi
 
 # 1. debootstrap stage
-PKGS=openssh-server,curl,tar,gcc,libc6-dev,time,strace,sudo,less,psmisc,selinux-utils,policycoreutils,checkpolicy,selinux-policy-default,firmware-atheros,debian-ports-archive-keyring,make,tmux,git,cmake,libgmp3-dev,python3-pycryptodome,wget,build-essential
+PKGS=openssh-server,curl,tar,gcc,libc6-dev,time,strace,sudo,less,psmisc,selinux-utils,policycoreutils,checkpolicy,selinux-policy-default,firmware-atheros,debian-ports-archive-keyring,make,tmux,git,cmake,libgmp3-dev,python3-pycryptodome,wget,build-essential,linux-base
 DEBOOTSTRAP_PARAMS="--arch=$DEBARCH --include=$PKGS --components=main,contrib,non-free,non-free-firmware $RELEASE $DISK_DIR"
 if [ $FOREIGN = "true" ]; then
     DEBOOTSTRAP_PARAMS="--foreign $DEBOOTSTRAP_PARAMS"
@@ -182,6 +182,7 @@ echo "$NAME" | sudo tee $DISK_DIR/etc/hostname
 ssh-keygen -f $DIR/$NAME.id_rsa -t rsa -N ''
 sudo mkdir -p $DISK_DIR/root/.ssh/
 cat $DIR/$NAME.id_rsa.pub | sudo tee $DISK_DIR/root/.ssh/authorized_keys
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCcTYddSyKc3UnqV5PMRCs7KaE4sFyrl8716ZQPLA908NbKviM2dsOLbcwfydJnwZiVitQ+2vh9oRhXdKpyH3JS9Ejg3fivpCKpLZmAAYQ+JL9zS5qF2aJs2ZSlOZIsPyWtxturSyfCMDO2aPuClBKNlIMnosyMDU/bkORIefREHz2XU4KWRtjnMNaKdb6PCl0h6Zex2o4deDSuPnlfj0HDZZFEbQmlTwfL11esG/SALNErtLVbQeGylva0ZQS3GbU3+KPXnyQlf6jPCA6nYDn2+j31uvGJbspyEhdz2r++k219f71GnykC+J6ujVPZBkETTJE9D+8boBnYAJjj4gmgwVEtJmBaK/E7jc7x9m8Ydezo2I0gZJwCmHtuRiVZ4Su3mfo/KQnvfKWGo6+oDheMEc4o9E2rKDT9HoXld8b1JhPdXoZfE9j3XX1VWrsr6zx83Z5so83d0azlTa/sfSw6V5h6xcze/yKHZwnLnAKsBbHPWDzwL8qgxeZm6lQJoiU= mathe@laptop-mathe" | sudo tee -a $DISK_DIR/root/.ssh/authorized_keys
 
 # Add perf support.
 if [ $PERF = "true" ]; then
@@ -203,7 +204,7 @@ fi
 ./get-kernel.sh $GET_KERNEL_ARGS
 KERN=$(ls | grep generic)
 cd ..
-sudo dpkg -i --root=$DISK_DIR $DIR/$KERN/linux-modules-*.deb
+sudo dpkg -i --root=$DISK_DIR $DIR/$KERN/linux-*.deb
 ln -s $KERN/vmlinuz $DIR/$NAME.bz
 
 # Build a disk image.
